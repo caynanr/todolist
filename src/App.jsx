@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeProvider } from "styled-components";
 
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
+
+import useStorage from "./hooks/useStorage";
 
 import styled from "styled-components";
 import GlobalStyle from "./styles/global";
@@ -59,9 +61,12 @@ const Footer = styled.div`
 `;
 
 const App = () => {
-  const [theme, setTheme] = useState(false);
+  // const [theme, setTheme] = useState(false);
+  const [theme, setTheme] = useStorage("theme", false);
+
   const [description, setDescription] = useState("");
-  const [task, setTask] = useState([]);
+  // const [task, setTask] = useState([]);
+  const [task, setTask] = useStorage("task", []);
 
   const handleNewTask = (description) => {
     const newTask = [...task, { id: uuidv4(), description, completed: false }];
