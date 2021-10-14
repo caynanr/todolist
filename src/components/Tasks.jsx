@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const List = styled.ul`
   background-color: #181824;
-  width: 400px;
+  width: 100%;
   border-radius: 4px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
   overflow: hidden;

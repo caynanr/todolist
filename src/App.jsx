@@ -15,13 +15,19 @@ import { light, dark } from "./styles/theme";
 
 const Container = styled.main`
   margin-top: 1.5rem;
-  width: 400px;
+  width: 25rem;
+
+  @media screen and (max-width: 450px) {
+    width: 100%;
+    padding: 0;
+  }
 `;
 
 const Header = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 1rem;
 
@@ -43,7 +49,7 @@ const Header = styled.div`
 `;
 
 const Footer = styled.div`
-  width: 100%auto;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,13 +108,13 @@ const App = () => {
             {theme ? <BsFillSunFill /> : <BsFillMoonFill />}
           </button>
         </Header>
-        <div>
-          <Input
-            addNewTask={handleNewTask}
-            value={description}
-            setValue={setDescription}
-          />
-        </div>
+
+        <Input
+          addNewTask={handleNewTask}
+          value={description}
+          setValue={setDescription}
+        />
+
         <Tasks
           tasks={task}
           deleteTask={handleDeleteCompletedTaks}
