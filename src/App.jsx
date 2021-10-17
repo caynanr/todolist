@@ -15,11 +15,11 @@ import { light, dark } from "./styles/theme";
 
 const Container = styled.main`
   margin-top: 1.5rem;
-  width: 30rem;
-
-  @media screen and (max-width: 450px) {
-    width: 100%;
+  width: 500px;
+  @media screen and (max-width: 400px) {
+    width: 95%;
     padding: 0;
+    margin: 10px auto;
   }
 `;
 
@@ -53,8 +53,9 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 0.5rem;
-  height: 50px;
+  min-height: 50px;
   border-radius: 0px 0px 4px 4px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
   color: ${(props) => props.theme.heading};
@@ -66,11 +67,15 @@ const Footer = styled.div`
   }
   & span {
     cursor: pointer;
-    font-size: 0.9rem;
   }
 
   & span:hover {
     color: ${(props) => props.theme.link};
+  }
+
+  @media screen and (max-width: 400px) {
+    justify-content: space-around;
+    flex-wrap: wrap;
   }
 `;
 
