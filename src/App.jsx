@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeProvider } from "styled-components";
 
@@ -15,7 +15,7 @@ import { light, dark } from "./styles/theme";
 
 const Container = styled.main`
   margin-top: 1.5rem;
-  width: 25rem;
+  width: 30rem;
 
   @media screen and (max-width: 450px) {
     width: 100%;
@@ -51,36 +51,43 @@ const Header = styled.div`
 const Footer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  padding: 0.5rem;
+  height: 50px;
+  border-radius: 0px 0px 4px 4px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  color: ${(props) => props.theme.heading};
+  background-color: ${(props) => props.theme.card};
+
+  & .filters span {
+    margin-left: 5px;
+    font-weight: 700;
+  }
   & span {
-    color: ${(props) => props.theme.heading};
-    padding: 0.2rem;
     cursor: pointer;
     font-size: 0.9rem;
   }
 
   & span:hover {
-    color: ${(props) => props.theme.heading};
+    color: ${(props) => props.theme.link};
   }
 `;
 
 const App = () => {
-  // const [theme, setTheme] = useState(false);
   const [theme, setTheme] = useStorage("theme", false);
-
   const [description, setDescription] = useState("");
-  // const [task, setTask] = useState([]);
-  const [task, setTask] = useStorage("task", []);
+  const [tasks, setTask] = useStorage("task", []);
+  const [taskRender, setTaskRender] = useState(tasks);
+  const [taskCount, setTaskCount] = useState("0");
 
   const handleNewTask = (description) => {
-    const newTask = [...task, { id: uuidv4(), description, completed: false }];
+    const newTask = [...tasks, { id: uuidv4(), description, completed: false }];
     setTask(newTask);
     setDescription("");
   };
   const handleCompletedTask = (id) => {
-    const newTask = task.map((task) => {
+    const newTask = tasks.map((task) => {
       if (task.id === id) {
         task.completed = !task.completed;
       }
@@ -90,9 +97,39 @@ const App = () => {
     setTask(newTask);
   };
   const handleDeleteCompletedTaks = () => {
-    const newTask = task.filter((task) => task.completed === false);
+    const newTask = tasks.filter((task) => task.completed === false);
     setTask(newTask);
   };
+
+  //TASKS FILTERS
+
+  const activeTasks = () => {
+    const newTasks = tasks.filter((task) => task.completed === false);
+    setTaskRender(newTasks);
+  };
+
+  const completedTasks = () => {
+    const newTasks = tasks.filter((task) => task.completed === true);
+    setTaskRender(newTasks);
+  };
+
+  const allTasks = () => {
+    const newTasks = tasks.map((task) => task);
+    setTaskRender(newTasks);
+  };
+
+  const deleteTask = (id) => {
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTask(newTasks);
+  };
+
+  useEffect(() => {
+    setTaskRender(tasks);
+    const total = tasks.filter((task) => task.completed === false).length;
+
+    if (total <= 1) setTaskCount(`${total} item left`);
+    else setTaskCount(`${total} items left`);
+  }, [tasks]);
 
   return (
     <ThemeProvider theme={theme ? light : dark}>
@@ -116,14 +153,20 @@ const App = () => {
         />
 
         <Tasks
-          tasks={task}
-          deleteTask={handleDeleteCompletedTaks}
+          tasks={taskRender}
+          deleteTask={deleteTask}
           completedTask={handleCompletedTask}
         ></Tasks>
         <Footer>
-          {task.length > 0 && (
+          <>
+            <p>{taskCount}</p>
+            <div className="filters">
+              <span onClick={allTasks}>All</span>
+              <span onClick={activeTasks}>Active</span>
+              <span onClick={completedTasks}>Completed</span>
+            </div>
             <span onClick={handleDeleteCompletedTaks}>Clear Completed</span>
-          )}
+          </>
         </Footer>
       </Container>
     </ThemeProvider>
